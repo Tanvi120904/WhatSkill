@@ -1,47 +1,112 @@
 /*
- * Tailwind CSS Directives:
- * These lines integrate Tailwind's base, components, and utilities.
- * They are essential for the Tailwind classes in your JSX to work.
+ * Tailwind CSS Directives
  */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /*
- * Custom Component Styles (Purple/Indigo Theme)
+ * Custom Component Styles - Modern Purple Theme
  */
 
 @layer components {
-  /* Main button style: Gradient fill with text color */
+  /* Primary Button - Vibrant Purple Gradient */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 border border-transparent text-base font-medium rounded-xl shadow-lg
-      bg-gradient-to-r from-indigo-600 to-purple-600 text-white
-      hover:from-indigo-700 hover:to-purple-700
-      focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50
-      transition duration-300 ease-in-out transform hover:-translate-y-0.5;
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 border border-transparent text-base font-semibold rounded-2xl
+      bg-gradient-to-r from-purple-600 via-violet-600 to-purple-700 text-white
+      hover:from-purple-700 hover:via-violet-700 hover:to-purple-800
+      shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40
+      focus:outline-none focus:ring-4 focus:ring-purple-500 focus:ring-opacity-50
+      transition-all duration-300 ease-in-out transform hover:scale-105 hover:-translate-y-0.5
+      disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-lg;
   }
 
-  /* Secondary button style: Outline */
+  /* Outline Button - Purple Border */
   .btn-outline {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 border-2 text-base font-medium rounded-xl
-      border-indigo-500 text-indigo-600 bg-white
-      hover:bg-indigo-50 hover:border-indigo-600
-      focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-25
-      transition duration-300 ease-in-out;
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 border-2 text-base font-semibold rounded-2xl
+      border-purple-500 text-purple-700 bg-white
+      hover:bg-purple-50 hover:border-purple-600 hover:text-purple-800
+      shadow-md hover:shadow-lg
+      focus:outline-none focus:ring-4 focus:ring-purple-500 focus:ring-opacity-25
+      transition-all duration-300 ease-in-out;
   }
 
-  /* Card style with modern shadow and background */
+  /* Card - Modern Elevated Design */
   .card {
-    @apply bg-white p-6 rounded-2xl shadow-xl border border-gray-100;
+    @apply bg-white p-8 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100
+      hover:shadow-2xl hover:shadow-gray-200/60 transition-all duration-300;
   }
 
-  /* Input fields */
+  /* Input Fields - Clean & Modern */
   .input-field {
-    @apply w-full p-4 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 focus:outline-none transition;
+    @apply w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl
+      focus:border-purple-500 focus:ring-4 focus:ring-purple-500/20 focus:outline-none
+      bg-white placeholder:text-gray-400
+      transition-all duration-200 ease-in-out
+      disabled:bg-gray-50 disabled:cursor-not-allowed;
+  }
+
+  /* Badge Styles */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
+      bg-purple-100 text-purple-700 border border-purple-200;
+  }
+
+  /* Gradient Text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-purple-600 via-violet-600 to-purple-700 bg-clip-text text-transparent;
+  }
+
+  /* Glass Effect Card */
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-lg border border-white/20 rounded-3xl shadow-2xl;
   }
 }
 
-/* Base Body Styles for a clean, modern look */
+/* Base Body Styles */
 body {
-  @apply bg-gray-50 min-h-screen text-gray-800 font-sans;
+  @apply bg-gradient-to-br from-purple-50 via-white to-violet-50 min-h-screen text-gray-800 font-sans antialiased;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-purple-300 rounded-full hover:bg-purple-400;
+}
+
+/* Smooth Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
 }
