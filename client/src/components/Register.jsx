@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { User, Mail, Lock, Eye, EyeOff, UserPlus, Loader2, Briefcase, Target, ArrowRight } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
-import Navbar from './Navbar';
+import { User, Mail, Lock, Eye, EyeOff, Sparkles, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Register = () => {
+  // --- STATE & HOOKS ---
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -17,44 +18,34 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [globalError, setGlobalError] = useState('');
-  const navigate = useNavigate();
+  const [focusedField, setFocusedField] = useState('');
 
+  // --- LOGIC ---
   const validateForm = () => {
     const newErrors = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
-    }
-
+    if (!formData.name.trim()) newErrors.name = 'Name is required';
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Email is invalid';
     }
-
     if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
     }
-
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
-    
     if (!formData.currentRole.trim()) {
       newErrors.currentRole = 'Current role is required';
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
     setErrors(prev => ({ ...prev, [e.target.name]: undefined }));
     setGlobalError('');
   };
@@ -71,11 +62,12 @@ const Register = () => {
     setLoading(true);
 
     try {
+      // Connects to your Backend
       const { confirmPassword, ...dataToSend } = formData;
-      const response = await axios.post('/api/auth/register', dataToSend);
+      await axios.post('http://localhost:5000/api/auth/register', dataToSend);
       
+      // On success, redirect to login
       navigate('/login?registrationSuccess=true');
-
     } catch (err) {
       setGlobalError(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
@@ -83,207 +75,181 @@ const Register = () => {
     }
   };
 
-  const inputClass = (fieldName) => 
-    `input-field pl-12 ${errors[fieldName] ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''}`;
-
+  // --- UI RENDER ---
   return (
-    <div className="flex items-center justify-center min-h-screen py-12 px-4 relative overflow-hidden">
-      {/* Background Decoration */}
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-violet-50 flex items-center justify-center p-4">
+      {/* Floating Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-purple-300/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-violet-300/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
+        <div className="absolute top-40 right-10 w-72 h-72 bg-violet-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse delay-1000"></div>
+        <div className="absolute -bottom-32 left-1/2 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse delay-500"></div>
       </div>
 
-      <div className="relative z-10 card w-full max-w-lg border-2 border-purple-100 animate-fadeIn">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-violet-600 rounded-2xl shadow-lg shadow-purple-500/30 mb-4">
-            <Target className="w-8 h-8 text-white" />
-          </div>
-          <h2 className="text-4xl font-bold gradient-text mb-2">Create Account</h2>
-          <p className="text-gray-600">Start your journey to your dream job</p>
-        </div>
-
-        {globalError && (
-          <div className="p-4 mb-6 text-sm text-red-700 bg-red-50 border-2 border-red-200 rounded-xl flex items-start gap-3" role="alert">
-            <span className="text-red-500 text-xl">⚠️</span>
-            <span>{globalError}</span>
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Name Field */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="name">
-              Full Name
-            </label>
-            <div className="relative">
-              <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                id="name"
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="John Doe"
-                className={inputClass('name')}
-                disabled={loading}
-              />
+      <div className="relative w-full max-w-md">
+        <div className="bg-white rounded-3xl shadow-2xl shadow-purple-500/10 p-8 backdrop-blur-sm border border-purple-100">
+          
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-600 to-violet-600 rounded-2xl mb-4 shadow-lg shadow-purple-500/40">
+              <Sparkles className="w-8 h-8 text-white" />
             </div>
-            {errors.name && <p className="text-xs text-red-600 mt-1.5 ml-1">{errors.name}</p>}
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h1>
+            <p className="text-gray-600">Join us and start your journey today</p>
           </div>
 
-          {/* Email Field */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="email">
-              Email Address
-            </label>
-            <div className="relative">
-              <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                id="email"
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="you@example.com"
-                className={inputClass('email')}
-                disabled={loading}
-              />
+          {/* Global Error */}
+          {globalError && (
+            <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg">
+              <p className="text-sm text-red-700">{globalError}</p>
             </div>
-            {errors.email && <p className="text-xs text-red-600 mt-1.5 ml-1">{errors.email}</p>}
-          </div>
+          )}
 
-          {/* Current Role Field */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="currentRole">
-              Current Role/Experience
-            </label>
-            <div className="relative">
-              <Briefcase className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                id="currentRole"
-                type="text"
-                name="currentRole"
-                value={formData.currentRole}
-                onChange={handleChange}
-                placeholder="Software Engineer, Student, etc."
-                className={inputClass('currentRole')}
-                disabled={loading}
-              />
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Name */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+              <div className="relative group">
+                <User className={`absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors ${focusedField === 'name' ? 'text-purple-600' : 'text-gray-400'}`} />
+                <input
+                  name="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={handleChange}
+                  onFocus={() => setFocusedField('name')}
+                  onBlur={() => setFocusedField('')}
+                  placeholder="John Doe"
+                  className={`w-full pl-11 pr-4 py-3 bg-gray-50 border-2 rounded-xl outline-none transition-all ${errors.name ? 'border-red-300 focus:border-red-500' : 'border-transparent focus:border-purple-500 focus:bg-white focus:shadow-lg'}`}
+                  disabled={loading}
+                />
+              </div>
+              {errors.name && <p className="text-xs text-red-600 mt-1 ml-1">{errors.name}</p>}
             </div>
-            {errors.currentRole && <p className="text-xs text-red-600 mt-1.5 ml-1">{errors.currentRole}</p>}
-          </div>
 
-          {/* Password Field */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="password">
-              Password
-            </label>
-            <div className="relative">
-              <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                id="password"
-                type={showPassword ? 'text' : 'password'}
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="••••••••"
-                className="input-field pl-12 pr-12"
-                disabled={loading}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-purple-600 transition"
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
-                disabled={loading}
-              >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
+            {/* Email */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+              <div className="relative group">
+                <Mail className={`absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors ${focusedField === 'email' ? 'text-purple-600' : 'text-gray-400'}`} />
+                <input
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  onFocus={() => setFocusedField('email')}
+                  onBlur={() => setFocusedField('')}
+                  placeholder="you@example.com"
+                  className={`w-full pl-11 pr-4 py-3 bg-gray-50 border-2 rounded-xl outline-none transition-all ${errors.email ? 'border-red-300 focus:border-red-500' : 'border-transparent focus:border-purple-500 focus:bg-white focus:shadow-lg'}`}
+                  disabled={loading}
+                />
+              </div>
+              {errors.email && <p className="text-xs text-red-600 mt-1 ml-1">{errors.email}</p>}
             </div>
-            {errors.password && <p className="text-xs text-red-600 mt-1.5 ml-1">{errors.password}</p>}
-          </div>
 
-          {/* Confirm Password Field */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="confirmPassword">
-              Confirm Password
-            </label>
-            <div className="relative">
-              <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                id="confirmPassword"
-                type={showConfirmPassword ? 'text' : 'password'}
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                placeholder="••••••••"
-                className="input-field pl-12 pr-12"
-                disabled={loading}
-              />
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-purple-600 transition"
-                aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
-                disabled={loading}
-              >
-                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
+            {/* Role */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Current Role</label>
+              <div className="relative group">
+                <User className={`absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors ${focusedField === 'currentRole' ? 'text-purple-600' : 'text-gray-400'}`} />
+                <input
+                  name="currentRole"
+                  type="text"
+                  value={formData.currentRole}
+                  onChange={handleChange}
+                  onFocus={() => setFocusedField('currentRole')}
+                  onBlur={() => setFocusedField('')}
+                  placeholder="Software Engineer"
+                  className={`w-full pl-11 pr-4 py-3 bg-gray-50 border-2 rounded-xl outline-none transition-all ${errors.currentRole ? 'border-red-300 focus:border-red-500' : 'border-transparent focus:border-purple-500 focus:bg-white focus:shadow-lg'}`}
+                  disabled={loading}
+                />
+              </div>
+              {errors.currentRole && <p className="text-xs text-red-600 mt-1 ml-1">{errors.currentRole}</p>}
             </div>
-            {errors.confirmPassword && <p className="text-xs text-red-600 mt-1.5 ml-1">{errors.confirmPassword}</p>}
+
+            {/* Password */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+              <div className="relative group">
+                <Lock className={`absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors ${focusedField === 'password' ? 'text-purple-600' : 'text-gray-400'}`} />
+                <input
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={formData.password}
+                  onChange={handleChange}
+                  onFocus={() => setFocusedField('password')}
+                  onBlur={() => setFocusedField('')}
+                  placeholder="••••••••"
+                  className={`w-full pl-11 pr-11 py-3 bg-gray-50 border-2 rounded-xl outline-none transition-all ${errors.password ? 'border-red-300 focus:border-red-500' : 'border-transparent focus:border-purple-500 focus:bg-white focus:shadow-lg'}`}
+                  disabled={loading}
+                />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-purple-600">
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+              {errors.password && <p className="text-xs text-red-600 mt-1 ml-1">{errors.password}</p>}
+            </div>
+
+            {/* Confirm Password */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+              <div className="relative group">
+                <Lock className={`absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors ${focusedField === 'confirmPassword' ? 'text-purple-600' : 'text-gray-400'}`} />
+                <input
+                  name="confirmPassword"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  onFocus={() => setFocusedField('confirmPassword')}
+                  onBlur={() => setFocusedField('')}
+                  placeholder="••••••••"
+                  className={`w-full pl-11 pr-11 py-3 bg-gray-50 border-2 rounded-xl outline-none transition-all ${errors.confirmPassword ? 'border-red-300 focus:border-red-500' : 'border-transparent focus:border-purple-500 focus:bg-white focus:shadow-lg'}`}
+                  disabled={loading}
+                />
+                <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-purple-600">
+                  {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+              {errors.confirmPassword && <p className="text-xs text-red-600 mt-1 ml-1">{errors.confirmPassword}</p>}
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full mt-6 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white font-semibold py-3.5 px-6 rounded-xl shadow-lg shadow-purple-500/40 hover:shadow-xl hover:shadow-purple-500/50 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed group"
+            >
+              {loading ? (
+                <>
+                  <div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+                  Creating Account...
+                </>
+              ) : (
+                <>
+                  Create Account
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
+            </button>
+          </form>
+
+          {/* Divider */}
+          <div className="relative my-8">
+            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200"></div></div>
+            <div className="relative flex justify-center text-sm"><span className="px-4 bg-white text-gray-500">Already have an account?</span></div>
           </div>
 
-          {/* Submit Button */}
+          {/* Navigation Button */}
           <button
-            type="submit"
-            className="btn-primary w-full py-4 text-lg group mt-6"
-            disabled={loading}
+            type="button"
+            onClick={() => navigate('/login')}
+            className="w-full border-2 border-purple-200 hover:border-purple-300 text-purple-600 hover:text-purple-700 font-semibold py-3.5 px-6 rounded-xl hover:bg-purple-50 transition-all duration-300"
           >
-            {loading ? (
-              <>
-                <Loader2 className="animate-spin" size={22} />
-                Creating Account...
-              </>
-            ) : (
-              <>
-                <UserPlus size={22} />
-                Create Account
-                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-              </>
-            )}
+            Sign In Instead
           </button>
-        </form>
-
-        {/* Divider */}
-        <div className="relative my-8">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t-2 border-gray-200"></div>
-          </div>
-          <div className="relative flex justify-center">
-            <span className="px-4 bg-white text-gray-500 font-medium text-sm">
-              Already have an account?
-            </span>
-          </div>
+          
+          <p className="text-center text-xs text-gray-500 mt-6">
+            By creating an account, you agree to our <a href="#" className="text-purple-600 hover:underline">Terms</a> and <a href="#" className="text-purple-600 hover:underline">Privacy Policy</a>
+          </p>
         </div>
-
-        {/* Sign In Link */}
-        <Link to="/login" className="btn-outline w-full py-4">
-          Sign In Instead
-        </Link>
-
-        {/* Footer */}
-        <p className="text-center text-xs text-gray-500 mt-8">
-          By creating an account, you agree to our{' '}
-          <Link to="/terms" className="text-purple-600 hover:text-purple-800 font-medium hover:underline">
-            Terms of Service
-          </Link>{' '}
-          and{' '}
-          <Link to="/privacy" className="text-purple-600 hover:text-purple-800 font-medium hover:underline">
-            Privacy Policy
-          </Link>
-        </p>
       </div>
     </div>
   );

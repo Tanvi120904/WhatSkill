@@ -1,4 +1,7 @@
 // server.js
+// At the very top of server.js
+require('dotenv').config(); 
+const geminiService = require('./services/geminiService');
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
