@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Login = () => {
-  // --- STATE & HOOKS ---
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
@@ -12,14 +11,13 @@ const Login = () => {
   const [error, setError] = useState('');
   const [focusedField, setFocusedField] = useState('');
 
-  // --- LOGIC ---
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setError('');
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
     
     if (!formData.email || !formData.password) {
       setError('Please fill in all fields');
@@ -30,15 +28,10 @@ const Login = () => {
     setError('');
 
     try {
-      // Connects to your Backend
-      const response = await axios.post('http://localhost:5000/api/auth/login', formData);
-      
-      // Save Token
+      const response = await axios.post('https://whatskill.onrender.com/api/auth/login', formData);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
-      
-      // Redirect
-      navigate('/dashboard'); // Make sure you have a /dashboard route!
+      navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
     } finally {
@@ -46,10 +39,8 @@ const Login = () => {
     }
   };
 
-  // --- UI RENDER ---
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-violet-50 flex items-center justify-center p-4">
-      {/* Floating Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 right-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
         <div className="absolute bottom-20 left-10 w-72 h-72 bg-violet-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
@@ -58,8 +49,6 @@ const Login = () => {
 
       <div className="relative w-full max-w-md">
         <div className="bg-white rounded-3xl shadow-2xl shadow-purple-500/10 p-8 backdrop-blur-sm border border-purple-100">
-          
-          {/* Header */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-600 to-violet-600 rounded-2xl mb-4 shadow-lg shadow-purple-500/40">
               <LogIn className="w-8 h-8 text-white" />
@@ -68,7 +57,6 @@ const Login = () => {
             <p className="text-gray-600">Sign in to continue your journey</p>
           </div>
 
-          {/* Error Alert */}
           {error && (
             <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg">
               <p className="text-sm text-red-700">{error}</p>
@@ -76,7 +64,6 @@ const Login = () => {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Email */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
               <div className="relative group">
@@ -99,7 +86,6 @@ const Login = () => {
               </div>
             </div>
 
-            {/* Password */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
@@ -125,7 +111,6 @@ const Login = () => {
               </div>
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
@@ -145,13 +130,11 @@ const Login = () => {
             </button>
           </form>
 
-          {/* Divider */}
           <div className="relative my-8">
             <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200"></div></div>
             <div className="relative flex justify-center text-sm"><span className="px-4 bg-white text-gray-500">Don't have an account?</span></div>
           </div>
 
-          {/* Navigation Button */}
           <button
             type="button"
             onClick={() => navigate('/register')}
