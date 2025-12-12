@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Target, Loader2, Briefcase, User, Sparkles, Zap } from 'lucide-react';
 import { analyzeSkills } from '../services/api';
+import Navbar from './Navbar';
 
 const SkillAnalyzer = ({ onAnalysisComplete }) => {
   const [jobDescription, setJobDescription] = useState('');

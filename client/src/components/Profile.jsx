@@ -3,6 +3,7 @@ import {
   User, Mail, Briefcase, Edit2, Save, X, Target, TrendingUp, Award, Calendar, LogOut, Settings, Loader2, Sparkles
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
 import axios from 'axios';
 
 const Profile = () => {

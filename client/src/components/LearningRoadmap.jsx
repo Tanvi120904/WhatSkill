@@ -1,7 +1,7 @@
 import React from 'react';
 import { ExternalLink, Youtube, BookOpen, Code, FileText, Sparkles, Calendar } from 'lucide-react';
 import ProgressTracker from './ProgressTracker';
-
+import Navbar from './Navbar';
 const LearningRoadmap = ({ roadmap, progress, onToggleProgress }) => {
   return (
     <div className="min-h-screen py-12 px-4">

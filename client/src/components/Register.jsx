@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { User, Mail, Lock, Eye, EyeOff, UserPlus, Loader2, Briefcase, Target, ArrowRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
 import axios from 'axios';
 
 const Register = () => {

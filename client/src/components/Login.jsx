@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, LogIn, Loader2, Target, ArrowRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
 import axios from 'axios';
 
 const Login = () => {

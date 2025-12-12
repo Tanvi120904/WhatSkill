@@ -1,5 +1,6 @@
 import React from 'react';
 import { Trophy, Target, TrendingUp, CheckCircle, Clock, Zap } from 'lucide-react';
+import Navbar from './Navbar';
 
 const ProgressTracker = ({ progress, roadmap }) => {
   // Calculate total tasks

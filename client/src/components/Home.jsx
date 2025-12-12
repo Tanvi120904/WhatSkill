@@ -1,7 +1,7 @@
 import React from 'react';
 import { LogIn, UserPlus, User, Target, Sparkles, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
+import Navbar from './components/Navbar';
 const Home = () => {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-24 overflow-hidden">

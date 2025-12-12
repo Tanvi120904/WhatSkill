@@ -1,5 +1,6 @@
 import React from 'react';
 import { CheckCircle2, Circle, TrendingUp, Rocket, Award, AlertCircle } from 'lucide-react';
+import Navbar from './Navbar';
 
 const ResultsDashboard = ({ analysis, onGenerateRoadmap, loading }) => {
   const { currentSkills, missingSkills, partialSkills } = analysis;

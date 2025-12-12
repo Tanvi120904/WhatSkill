@@ -1,5 +1,6 @@
 import React from 'react';
 import { Target, TrendingUp, Award, Sparkles } from 'lucide-react';
+import Navbar from './Navbar';
 
 const FeatureSection = () => {
   const features = [
